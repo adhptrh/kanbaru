@@ -1,7 +1,7 @@
 package main
 
 import (
-	"alfa/path/sample"
+	"kanbaru/path/sample"
 )
 
 var Paths []map[string]interface{} = []map[string]interface{}{

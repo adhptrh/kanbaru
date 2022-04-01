@@ -1,3 +1,3 @@
-module alfa
+module kanbaru
 
 go 1.18

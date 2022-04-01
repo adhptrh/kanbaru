@@ -1,9 +1,9 @@
 package main
 
 import (
-	"alfa/path/index"
 	"flag"
 	"fmt"
+	"kanbaru/path/index"
 	"net/http"
 	"strings"
 )
