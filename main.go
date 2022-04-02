@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"kanbaru/config/path"
 	"kanbaru/kanbaru"
 	"kanbaru/kanbaru/cli"
 	"kanbaru/path/index"
@@ -28,25 +29,34 @@ func main() {
 	port := flag.Int("port", 1337, "Port for the server")
 	flag.Parse()
 
+	Path()
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 
 		fmt.Printf("%s%s%s%s%s", hiblue("["), white(fmt.Sprintf("%v", r.Method)), hiblue("]"), white(" - "), hiyellow(fmt.Sprintf("%v", r.URL.Path)))
 		fmt.Println()
-		for i := 0; i < len(Paths); i++ {
+		for i := 0; i < len(path.Paths); i++ {
 			rr := kanbaru.HttpReq{
 				Request:  r,
-				CheckUrl: Paths[i]["path"].(string),
+				CheckUrl: path.Paths[i]["path"].(string),
 			}
 			if strings.EqualFold("/", r.URL.Path) {
 				index.Main(w, rr)
 				return
 			}
-			res := checkMatch(Paths[i], r.URL.Path)
+			res := checkMatch(path.Paths[i], r.URL.Path)
 			if res != nil {
-				res["target"].(func(w http.ResponseWriter, r kanbaru.HttpReq))(w, rr)
-				return
+				if res["method"] == "ALL" {
+					res["target"].(func(w http.ResponseWriter, r kanbaru.HttpReq))(w, rr)
+					return
+				}
+				if res["method"] == r.Method {
+					res["target"].(func(w http.ResponseWriter, r kanbaru.HttpReq))(w, rr)
+					return
+				}
 			}
 		}
+		w.WriteHeader(404)
 		fmt.Fprintf(w, "Not found")
 	})
 

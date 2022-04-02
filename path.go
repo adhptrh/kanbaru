@@ -1,16 +1,12 @@
 package main
 
 import (
+	"kanbaru/config/path"
 	"kanbaru/path/sample"
 )
 
-var Paths []map[string]interface{} = []map[string]interface{}{
-	{
-		"path":   "/sample",
-		"target": sample.Main,
-	},
-	{
-		"path":   "/sample/:inidata/data",
-		"target": sample.Dynamic,
-	},
+func Path() {
+	path.Get("/sample", sample.Main)
+	path.Get("/sample/:inidata/data", sample.Dynamic)
+	path.All("/allmethod", sample.Main)
 }
