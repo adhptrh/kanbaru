@@ -11,7 +11,6 @@ import (
 	"github.com/fatih/color"
 )
 
-var cyan = color.New(color.FgCyan).SprintFunc()
 var white = color.New(color.FgWhite).SprintFunc()
 var hiblue = color.New(color.FgHiBlue).SprintFunc()
 var hiyellow = color.New(color.FgHiYellow).SprintFunc()
@@ -21,7 +20,8 @@ func main() {
 	flag.Parse()
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Printf("%s %s", cyan(fmt.Sprintf("[%v]", r.Method)), white(fmt.Sprintf("- %v", r.URL.Path)))
+
+		fmt.Printf("%s%s%s%s%s", hiblue("["), white(fmt.Sprintf("%v", r.Method)), hiblue("]"), white(" - "), hiyellow(fmt.Sprintf("%v", r.URL.Path)))
 		fmt.Println()
 		for i := 0; i < len(Paths); i++ {
 			rr := kanbaru.HttpReq{
