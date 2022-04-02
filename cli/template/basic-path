@@ -1,0 +1,10 @@
+package __package_name__
+
+import (
+	"kanbaru/kanbaru"
+	"net/http"
+)
+
+func Main(w http.ResponseWriter, r kanbaru.HttpReq) {
+	w.Write([]byte("Basic response"))
+}
