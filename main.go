@@ -4,12 +4,11 @@ import (
 	"flag"
 	"fmt"
 	"kanbaru/kanbaru"
+	"kanbaru/kanbaru/cli"
 	"kanbaru/path/index"
 	"net/http"
 	"os"
 	"strings"
-
-	"kanbaru/cli"
 
 	"github.com/fatih/color"
 )
