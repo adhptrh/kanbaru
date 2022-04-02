@@ -7,14 +7,22 @@ import (
 	"kanbaru/path/index"
 	"net/http"
 	"strings"
+
+	"github.com/fatih/color"
 )
+
+var cyan = color.New(color.FgCyan).SprintFunc()
+var white = color.New(color.FgWhite).SprintFunc()
+var hiblue = color.New(color.FgHiBlue).SprintFunc()
+var hiyellow = color.New(color.FgHiYellow).SprintFunc()
 
 func main() {
 	port := flag.Int("port", 1337, "Port for the server")
 	flag.Parse()
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println(r.URL.Path)
+		fmt.Printf("%s %s", cyan(fmt.Sprintf("[%v]", r.Method)), white(fmt.Sprintf("- %v", r.URL.Path)))
+		fmt.Println()
 		for i := 0; i < len(Paths); i++ {
 			rr := kanbaru.HttpReq{
 				Request:  r,
@@ -33,7 +41,8 @@ func main() {
 		fmt.Fprintf(w, "Not found")
 	})
 
-	fmt.Println("Listening on port", *port)
+	fmt.Printf("%s%s%s", hiblue("Listening on port "), hiyellow(fmt.Sprintf("%v", *port)), hiblue("..."))
+	fmt.Println()
 	http.ListenAndServe(":"+fmt.Sprint(*port), nil)
 }
 
