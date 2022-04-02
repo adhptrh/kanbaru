@@ -6,7 +6,10 @@ import (
 	"kanbaru/kanbaru"
 	"kanbaru/path/index"
 	"net/http"
+	"os"
 	"strings"
+
+	"kanbaru/cli"
 
 	"github.com/fatih/color"
 )
@@ -16,6 +19,13 @@ var hiblue = color.New(color.FgHiBlue).SprintFunc()
 var hiyellow = color.New(color.FgHiYellow).SprintFunc()
 
 func main() {
+	if len(os.Args) > 1 {
+		if os.Args[1] == "cli" {
+			cli.Main()
+			return
+		}
+	}
+
 	port := flag.Int("port", 1337, "Port for the server")
 	flag.Parse()
 
