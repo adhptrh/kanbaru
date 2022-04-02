@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"kanbaru/kanbaru"
 	"kanbaru/path/index"
 	"net/http"
 	"strings"
@@ -15,19 +16,47 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(r.URL.Path)
 		for i := 0; i < len(Paths); i++ {
+			rr := kanbaru.HttpReq{
+				Request:  r,
+				CheckUrl: Paths[i]["path"].(string),
+			}
 			if strings.EqualFold("/", r.URL.Path) {
-				index.Main(w, r)
+				index.Main(w, rr)
 				return
 			}
-			if strings.EqualFold(Paths[i]["path"].(string), r.URL.Path) {
-				Paths[i]["target"].(func(http.ResponseWriter, *http.Request))(w, r)
+			res := checkMatch(Paths[i], r.URL.Path)
+			if res != nil {
+				res["target"].(func(w http.ResponseWriter, r kanbaru.HttpReq))(w, rr)
 				return
 			}
 		}
-
 		fmt.Fprintf(w, "Not found")
 	})
 
 	fmt.Println("Listening on port", *port)
 	http.ListenAndServe(":"+fmt.Sprint(*port), nil)
+}
+
+func checkMatch(check map[string]interface{}, url string) map[string]interface{} {
+	url = strings.TrimSuffix(url, "/")
+	checkUrlSplitted := strings.Split(check["path"].(string)[1:], "/")
+	currentUrlSplitted := strings.Split(url[1:], "/")
+	if len(checkUrlSplitted) == len(currentUrlSplitted) {
+		checkUrl := ""
+		currentUrl := ""
+		for ii := 0; ii < len(checkUrlSplitted); ii++ {
+			if strings.HasPrefix(checkUrlSplitted[ii], ":") {
+				checkUrl += "/" + checkUrlSplitted[ii][1:]
+				currentUrl += "/" + checkUrlSplitted[ii][1:]
+				continue
+			}
+			checkUrl += "/" + checkUrlSplitted[ii]
+			currentUrl += "/" + currentUrlSplitted[ii]
+		}
+
+		if strings.EqualFold(checkUrl, currentUrl) {
+			return check
+		}
+	}
+	return nil
 }

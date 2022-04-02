@@ -1,10 +1,11 @@
 package sample
 
 import (
+	"kanbaru/kanbaru"
 	"net/http"
 )
 
-func Main(w http.ResponseWriter, r *http.Request) {
+func Main(w http.ResponseWriter, r kanbaru.HttpReq) {
 	switch r.Method {
 	case "GET":
 		Get(w, r)
