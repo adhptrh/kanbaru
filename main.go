@@ -3,9 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"kanbaru/config/path"
 	"kanbaru/kanbaru"
 	"kanbaru/kanbaru/cli"
+	"kanbaru/kanbaru/path"
 	"kanbaru/path/index"
 	"net/http"
 	"os"

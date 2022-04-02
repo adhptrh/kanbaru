@@ -1,7 +1,7 @@
 package main
 
 import (
-	"kanbaru/config/path"
+	"kanbaru/kanbaru/path"
 	"kanbaru/path/sample"
 )
 
